@@ -26,15 +26,23 @@ jobs:
       - name: Build with Maven
         run: mvn clean package --batch-mode
 
-      - name: Verify artifact exists
+      - name: Locate JAR file
+        id: find_jar
         run: |
-          if [ ! -f target/echo-api.jar ]; then
-            echo "Error: target/echo-api.jar not found. Check your Maven build."
+          # Look for the first .jar file in the target directory
+          JAR_FILE=$(find target -maxdepth 1 -type f -name "*.jar" | head -n 1)
+          if [ -z "$JAR_FILE" ]; then
+            echo "Error: No jar file found in target folder."
             exit 1
+          else
+            BASENAME=$(basename "$JAR_FILE")
+            echo "Found JAR file: $JAR_FILE"
+            echo "JAR_FILE=$JAR_FILE" >> $GITHUB_OUTPUT
+            echo "JAR_BASENAME=$BASENAME" >> $GITHUB_OUTPUT
           fi
 
       - name: Zip the JAR file
-        run: zip -j echo-api.zip target/echo-api.jar
+        run: zip -j echo-api.zip "${{ steps.find_jar.outputs.JAR_FILE }}"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -73,7 +81,7 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'echo-api'
-          package: echo-api.jar
+          package: ${{ steps.find_jar.outputs.JAR_BASENAME }}
 
       - name: Set Startup Command (for Java)
-        run: az webapp config set --name echo-api --resource-group echo-healthcare-rg --startup-file "java -jar /home/site/wwwroot/echo-api.jar"
+        run: az webapp config set --name echo-api --resource-group echo-healthcare-rg --startup-file "java -jar /home/site/wwwroot/${{ steps.find_jar.outputs.JAR_BASENAME }}"
