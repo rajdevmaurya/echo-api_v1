@@ -1,0 +1,56 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: echo-api
+  datasource:
+    url: jdbc:mysql://echo-db.mysql.database.azure.com:3306/echodb?useSSL=false
+    username: echodb
+    password: mydb@hs18
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+  hikari:
+    minimum-idle: 5
+    maximum-pool-size: 20
+    idle-timeout: 30000
+    max-lifetime: 1800000
+    connection-timeout: 30000
+    pool-name: HikariCP
+  jpa:
+    hibernate:
+      ddl-auto: none  # Options: none, validate, update, create, create-drop
+    show-sql: false  # Logs SQL queries in the console
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+management:
+  endpoints:
+    web:
+      exposure.include: beans, env, health, info, metrics, mappings
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  show-actuator: true
+  swagger-ui:
+    groups-order: DESC
+    disable-swagger-default-url: true
+
+app:
+  jwt:
+    # Signing key for HS512 algorithm
+    # In http://www.allkeysgenerator.com/ you can generate all kinds of keys
+    secret: v9y$B&E)H@MbQeThWmZq4t7w!z%C*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeShVkYp
+    expiration:
+      minutes: 300
+  cors:
+    allowed-origins: "*"
+  number-of-fake-jobs: 30
+
+logging:
+  level:
+    org.springframework.data.elasticsearch.core: DEBUG
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+    org.springframework.security: DEBUG
