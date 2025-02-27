@@ -1,4 +1,7 @@
-name: Build and deploy Java app to Azure Web App - echo-api
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy JAR app to Azure Web App - echo-api
 
 on:
   push:
@@ -9,45 +12,23 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Set up Java 17
-        uses: actions/setup-java@v3
+      - uses: actions/checkout@v4
+
+      - name: Set up Java version
+        uses: actions/setup-java@v1
         with:
-          distribution: 'temurin'
           java-version: '17'
-          cache: 'maven'
 
       - name: Build with Maven
-        run: mvn clean package --batch-mode
+        run: mvn clean install
 
-      - name: Locate JAR file
-        id: find_jar
-        run: |
-          JAR_FILE=$(find target -maxdepth 1 -type f -name "*.jar" | head -n 1)
-          if [ -z "$JAR_FILE" ]; then
-            echo "Error: No jar file found in target folder."
-            exit 1
-          else
-            BASENAME=$(basename "$JAR_FILE")
-            echo "Found JAR file: $JAR_FILE"
-            echo "JAR_FILE=$JAR_FILE" >> $GITHUB_ENV
-            echo "JAR_BASENAME=$BASENAME" >> $GITHUB_ENV
-          fi
-
-      - name: Zip the JAR file
-        run: zip -j echo-api.zip "$JAR_FILE"
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
         with:
           name: java-app
-          path: echo-api.zip
+          path: '${{ github.workspace }}/target/*.jar'
 
   deploy:
     runs-on: ubuntu-latest
@@ -55,32 +36,18 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write
-      contents: read
 
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
         with:
           name: java-app
 
-      - name: Unzip artifact
-        run: unzip echo-api.zip -d .
-
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@v2
         with:
           app-name: 'echo-api'
-          package: echo-api.zip  # Corrected path
-
-      - name: Set Startup Command (for Java)
-        run: az webapp config set --name echo-api --resource-group echo-healthcare-rg --startup-file "java -jar /home/site/wwwroot/${{ env.JAR_BASENAME }}"
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+          package: '*.jar'
