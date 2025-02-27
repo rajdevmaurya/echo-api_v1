@@ -74,13 +74,14 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+          auth-type: 'OIDC'
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'echo-api'
-          package: echo-api.zip  # Corrected path
+          package: echo-api.zip
 
       - name: Set Startup Command (for Java)
         run: az webapp config set --name echo-api --resource-group echo-healthcare-rg --startup-file "java -jar /home/site/wwwroot/${{ env.JAR_BASENAME }}"
