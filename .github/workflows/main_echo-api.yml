@@ -1,4 +1,4 @@
-:name: Build and deploy Java app to Azure Web App - echo-api
+name: Build and deploy Java app to Azure Web App - echo-api
 
 on:
   push:
