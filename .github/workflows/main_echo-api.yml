@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'echo-api'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B233909CAB5E4F58BE4850E4AB7654E1 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
           package: '*.jar'
