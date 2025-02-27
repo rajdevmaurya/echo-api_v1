@@ -69,11 +69,10 @@ jobs:
       - name: Unzip artifact
         run: unzip echo-api.zip -d .
 
-      - name: Validate Federated Identity
-        run: |
-          az ad app federated-credential list --id "${{ secrets.AZUREAPPSERVICE_CLIENTID }}" --output json | jq .
+      - name: Debug Federated Identity
+        run: az ad app federated-credential list --id "${{ secrets.AZUREAPPSERVICE_CLIENTID }}" --output json | jq .
 
-      - name: Login to Azure
+      - name: Login to Azure using OIDC
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
