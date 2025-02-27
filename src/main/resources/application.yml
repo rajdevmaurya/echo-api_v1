@@ -46,7 +46,7 @@ app:
     expiration:
       minutes: 300
   cors:
-    allowed-origins: "*"
+    allowed-origins: "https://echo-ui-a3f7c6g4bkcxaef9.centralindia-01.azurewebsites.net"
   number-of-fake-jobs: 30
 
 logging:
