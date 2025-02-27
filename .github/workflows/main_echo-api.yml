@@ -56,8 +56,9 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write
+      id-token: write  # Required for OIDC authentication
       contents: read
+      actions: read
 
     steps:
       - name: Download artifact
@@ -68,12 +69,18 @@ jobs:
       - name: Unzip artifact
         run: unzip echo-api.zip -d .
 
+      - name: Validate Federated Identity
+        run: |
+          az ad app federated-credential list --id "${{ secrets.AZUREAPPSERVICE_CLIENTID }}" --output json | jq .
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+          allow-no-subscriptions: true
+          enable-AzPSSession: false  # Disable unnecessary PowerShell session
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
