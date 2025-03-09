@@ -6,15 +6,21 @@ import lombok.Data;
 @Data
 public class UpdateJobRequest {
 
-    @Schema(example = "Senior Software Developer")
+    @Schema(example = "Echo Health care")
     private String title;
 
-    @Schema(example = "Facebook")
+    @Schema(example = "Echo Health care")
     private String company;
 
-    @Schema(example = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Facebook_Logo_%282019%29.svg/500px-Facebook_Logo_%282019%29.svg.png")
+    @Schema(example = "Echo Health care")
     private String logoUrl;
 
-    @Schema(example = "Senior Software Developer with more than 8 years experience")
+    @Schema(example = "Echo Health care")
     private String description;
+    
+    private String lookupType;
+    
+    private String featureDescription;
+    
+    private String brand;
 }

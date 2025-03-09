@@ -127,6 +127,7 @@ public class JobController {
         JobServiceEntity job = jobServiceService.validateAndGetJobById(id);
         jobMapper.updateJobFromRequest(updateJobRequest, job);
         jobServiceService.saveJob(job);
+        
         return jobMapper.toJobResponse(job);
     }
 

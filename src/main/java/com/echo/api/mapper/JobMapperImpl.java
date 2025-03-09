@@ -59,5 +59,14 @@ public class JobMapperImpl implements JobMapper {
         if (updateJobRequest.getDescription() != null) {
             job.setDescription(updateJobRequest.getDescription());
         }
+        if (updateJobRequest.getLookupType() != null) {
+            job.setLookupType(updateJobRequest.getLookupType());
+        }
+        if (updateJobRequest.getBrand() != null) {
+            job.setBrand(updateJobRequest.getBrand());
+        }
+        if (updateJobRequest.getFeatureDescription() != null) {
+            job.setFeatureDescription(updateJobRequest.getFeatureDescription());
+        }
     }
 }
