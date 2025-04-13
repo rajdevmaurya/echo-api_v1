@@ -42,8 +42,14 @@ public class JobServiceEntity {
     
     @Column(nullable = false, length = 255)
     private String brand;
+    
+    @Column(name = "price",nullable = true, length = 250)
+    private Long price;
+    
+    @Column(name = "qty",nullable = true, length = 10)
+    private int qty;
 
-    public JobServiceEntity(String title, String company, String logoUrl, String description,String lookupType,String brand,String featureDescription) {
+    public JobServiceEntity(String title, String company, String logoUrl, String description,String lookupType,String brand,String featureDescription,Long price,int qty) {
         this.title = title;
         this.company = company;
         this.logoUrl = logoUrl;
@@ -52,5 +58,7 @@ public class JobServiceEntity {
         this.lookupType = lookupType;
         this.brand = brand;
         this.featureDescription = featureDescription;
+        this.price=price;
+        this.qty=qty;
     }
 }

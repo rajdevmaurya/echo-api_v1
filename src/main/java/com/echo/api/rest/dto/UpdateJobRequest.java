@@ -23,4 +23,8 @@ public class UpdateJobRequest {
     private String featureDescription;
     
     private String brand;
+    
+    private Long price;
+    
+    private int qty;
 }

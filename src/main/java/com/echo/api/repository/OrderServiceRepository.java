@@ -19,5 +19,10 @@ public interface OrderServiceRepository extends JpaRepository<OrderServiceEntity
 		Page<OrderServiceEntity> findJobsUsingQueryStringQuery(String text, Pageable pageable);
 	
 	 List<OrderServiceEntity> findAllByOrderByCreateDateDesc();
+	 
+	 
+	 @Query("SELECT j FROM OrderServiceEntity j WHERE j.user.id =?1")
+	Page<OrderServiceEntity> findJobsUsingUserId(Long id,Pageable pageable);
+	
    
 }

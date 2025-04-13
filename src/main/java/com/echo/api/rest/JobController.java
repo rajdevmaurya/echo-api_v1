@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,9 +29,12 @@ import com.echo.api.model.JobServiceEntity;
 import com.echo.api.model.OrderServiceEntity;
 import com.echo.api.model.User;
 import com.echo.api.order.OrderService;
+
 import com.echo.api.rest.dto.CreateJobRequest;
 import com.echo.api.rest.dto.CreateOrderRequest;
 import com.echo.api.rest.dto.JobResponse;
+import com.echo.api.rest.dto.OrderRequestDTO;
+import com.echo.api.rest.dto.OrderResponseDTO;
 import com.echo.api.rest.dto.SearchRequest;
 import com.echo.api.rest.dto.UpdateJobRequest;
 import com.echo.api.service.JobServiceService;
@@ -52,6 +56,8 @@ public class JobController {
     private final JobServiceService jobServiceService;
     private final JobMapper jobMapper;
     private final OrderService orderService;
+    
+    private final com.echo.api.service.OrderService myOrderService;
 
     @Operation(
             summary = "Get jobs with pagination"
@@ -103,6 +109,19 @@ public class JobController {
         JobServiceEntity job = jobMapper.toJob(createJobRequest);
         job = jobServiceService.saveJob(job);
         return jobMapper.toJobResponse(job);
+    }
+    
+    
+    @Operation(
+            summary = "Book Order"
+            , security = {@SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)}
+            )
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/bookOrderRequest")
+    public OrderResponseDTO createOrder(@Valid @RequestBody OrderRequestDTO orderRequest , Principal principal) {
+         System.out.println("Hi");
+         OrderResponseDTO response = myOrderService.createOrder(orderRequest,  principal.getName());
+         return response;
     }
 
     @Operation(

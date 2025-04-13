@@ -8,7 +8,7 @@ import java.time.Instant;
 
 @Data
 @Entity
-@Table(name = "orders")
+@Table(name = "inquiry_orders")
 public class OrderServiceEntity {
 
     @Id

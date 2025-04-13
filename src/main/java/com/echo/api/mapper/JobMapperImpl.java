@@ -29,7 +29,10 @@ public class JobMapperImpl implements JobMapper {
                 DATE_TIME_FORMATTER.format(job.getCreateDate()),
         		job.getLookupType(),
         		job.getBrand(),
-        		job.getFeatureDescription());
+        		job.getFeatureDescription(),
+        		job.getPrice(),
+        		job.getQty()
+        		);
     }
 
     @Override
@@ -38,7 +41,7 @@ public class JobMapperImpl implements JobMapper {
             return null;
         }
         return new JobServiceEntity(createJobRequest.getTitle(), createJobRequest.getCompany(), createJobRequest.getLogoUrl(), createJobRequest.getDescription(),createJobRequest.getLookupType(),
-        		createJobRequest.getBrand(),createJobRequest.getFeatureDescription());
+        		createJobRequest.getBrand(),createJobRequest.getFeatureDescription(),createJobRequest.getPrice(),createJobRequest.getQty());
     }
 
     @Override
@@ -67,6 +70,12 @@ public class JobMapperImpl implements JobMapper {
         }
         if (updateJobRequest.getFeatureDescription() != null) {
             job.setFeatureDescription(updateJobRequest.getFeatureDescription());
+        }
+        if (updateJobRequest.getPrice() != null) {
+            job.setPrice(updateJobRequest.getPrice());
+        }
+        if (updateJobRequest.getQty() != 0) {
+            job.setQty(updateJobRequest.getQty());
         }
     }
 }

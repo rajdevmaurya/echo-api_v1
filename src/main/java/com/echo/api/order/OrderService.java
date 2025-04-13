@@ -18,6 +18,8 @@ public interface OrderService {
 	void deleteOrder(OrderServiceEntity order);
 
 	Page<OrderServiceEntity> getOrdersByPage(Pageable pageable);
+	
+	Page<OrderServiceEntity> getOrdersByUserId(Long id,Pageable pageable);
 
 	OrderServiceEntity validateAndGetOrderById(Long id);
 	 

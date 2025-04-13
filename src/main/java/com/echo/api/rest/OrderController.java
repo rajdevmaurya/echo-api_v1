@@ -70,7 +70,7 @@ public class OrderController {
     public Page<OrderResponse> getOrdersByUserId(@PathVariable Long userId,@ParameterObject @PageableDefault(sort = {"createDate"}, direction = Direction.DESC) Pageable pageable,Principal principal) {
         //log.info("Request to get a page of jobs (offset = {}, pageSize = {}) made by {}",  pageable.getOffset(), pageable.getPageSize(), principal.getName());
     	//Pageable pageable = PageRequest.of(0, 10);
-        return orderService.getOrdersByPage(pageable).map(orderMapper::toOrderResponse);
+        return orderService.getOrdersByUserId(userId,pageable).map(orderMapper::toOrderResponse);
     }
       
     @Operation(

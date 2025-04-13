@@ -4,8 +4,8 @@ spring:
   application:
     name: echo-api
   datasource:
-    url: jdbc:mysql://echo-api-server.mysql.database.azure.com:3306/echo-db?useSSL=false
-    username: xbvndvqgge
+    url: jdbc:mysql://echo-api-server.mysql.database.azure.com:3306/echo-api-database?useSSL=false
+    username: wfsimjhigh
     password: WjUet8cx9NR$C9$d
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource

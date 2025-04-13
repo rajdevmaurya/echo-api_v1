@@ -53,4 +53,9 @@ public class OrderServiceImpl implements OrderService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Page<OrderServiceEntity> getOrdersByUserId(Long id,Pageable pageable) {
+		return orderRepository.findJobsUsingUserId(id,pageable);
+	}
 }
